@@ -2,7 +2,7 @@
 
 **National renewable-energy decision support with an integrated community-solar module.**
 
-India Green Grid is a full-stack platform covering the nine PS1 deliverables:
+India Green Grid is a full-stack platform covering the nine PS1 deliverables plus a verified multi-stakeholder ecosystem:
 
 | # | Deliverable | Module route |
 | --- | --- | --- |
@@ -14,7 +14,8 @@ India Green Grid is a full-stack platform covering the nine PS1 deliverables:
 | D6 | Circular-economy / recycling tracker | `/circular` |
 | D7 | Environmental impact dashboard | `/impact` |
 | D8 | Renewable forecasting and battery-storage planner | `/forecast` |
-| D9 | Six stakeholder portals plus administrator portal | `/dashboard`, `/admin` |
+| D9 | Role-specific stakeholder portals plus administrator portal | `/dashboard`, `/admin`, `/notifications` |
+| Ext | Verified multi-stakeholder workflows (solar, procurement, finance, recycling, compliance) | `/solar-requests`, `/procurement`, `/loans`, `/recycling-requests`, `/compliance`, `/organisation` |
 
 The original 60-flat community-solar implementation is retained as an integrated
 module: **SolarTwin** (generation/consumption simulation), **Fair allocation**,
@@ -34,6 +35,7 @@ module: **SolarTwin** (generation/consumption simulation), **Fair allocation**,
 - [Frontend setup](#frontend-setup)
 - [Demo accounts](#demo-accounts)
 - [Module guide](#module-guide)
+- [Ecosystem workflows](#ecosystem-workflows)
 - [API reference](#api-reference)
 - [Testing](#testing)
 - [Database changes](#database-changes)
@@ -50,22 +52,23 @@ SolarEquity360/
 ├── backend/
 │   ├── app/
 │   │   ├── core/            # configuration, auth dependencies, errors, logging
-│   │   ├── models/          # SQLAlchemy models (legacy + green_grid)
+│   │   ├── models/          # SQLAlchemy models (legacy + green_grid + ecosystem)
 │   │   ├── routers/         # REST endpoints per module
 │   │   ├── schemas/         # Pydantic validation
-│   │   ├── services/        # ALL business calculations live here (Python)
+│   │   ├── services/        # ALL business calculations and workflow rules (Python)
 │   │   └── main.py
 │   ├── alembic/             # schema migrations
 │   ├── data/seed/           # explicitly labelled sample JSON datasets
+│   ├── uploads/             # validated user document storage
 │   ├── scripts/seed.py      # idempotent demo/sample seed
 │   ├── tests/               # pytest API/integration suite
 │   └── .env.example
 └── frontend/
     ├── src/
-    │   ├── components/      # layout, UI kit, charts, platform primitives
+    │   ├── components/      # layout, UI kit, charts, ecosystem primitives
     │   ├── context/         # auth, health, notifications
     │   ├── lib/             # routing, formatting, access helpers
-    │   ├── pages/           # national pages, community pages, admin portal
+    │   ├── pages/           # national, community, ecosystem and admin pages
     │   └── services/        # thin Axios API wrappers
     └── .env.example
 ```
@@ -100,6 +103,9 @@ Rules enforced throughout the UI and API:
 - Unavailable sources are shown as unavailable; no values are fabricated.
 - Environmental impact figures are planning estimates, not audited reductions.
 - The community solar society is a seeded sample used to demonstrate workflows.
+- Transactional ecosystem records created by users are platform-recorded and
+  reported with `PLATFORM_RECORDED` provenance and `is_sample: false`; they are
+  never merged into labelled sample datasets.
 
 No API keys are invented or required.
 
@@ -108,7 +114,8 @@ No API keys are invented or required.
 ## Roles and access
 
 `UserRole` values: `ADMIN`, `RESIDENT`, `CITIZEN`, `DISCOM`, `INDUSTRY`,
-`FINANCIAL_INSTITUTION`, `POLICYMAKER`.
+`FINANCIAL_INSTITUTION`, `POLICYMAKER`, `SOLAR_INSTALLER`, `RENEWABLE_SUPPLIER`,
+`RECYCLER`. `FINANCIAL_INSTITUTION` is reused as the financier role.
 
 | Capability | Roles |
 | --- | --- |
@@ -117,11 +124,28 @@ No API keys are invented or required.
 | RPO target/compliance writes | `ADMIN`, `DISCOM`, `INDUSTRY` (scoped to own entities) |
 | Rooftop calculator, jobs, finance, circular | All authenticated roles |
 | Community solar modules | All authenticated roles; admin-only configuration/run pages |
+| Solar request creation | `CITIZEN`, `RESIDENT`, `INDUSTRY`, `ADMIN` |
+| Solar quotation/installation | `SOLAR_INSTALLER` (verified organisation) |
+| Procurement request + award | `DISCOM`, `INDUSTRY`, `ADMIN` (owner-scoped) |
+| Supplier quotations | `RENEWABLE_SUPPLIER` (verified organisation) |
+| Green loan products | `FINANCIAL_INSTITUTION`; admin oversight read-only |
+| Loan applications | `CITIZEN`, `RESIDENT`, `INDUSTRY` |
+| Recycling requests | `CITIZEN`, `RESIDENT`, `INDUSTRY` |
+| Recycling fulfilment/analytics | `RECYCLER` (verified organisation) |
+| Compliance filing/review | `DISCOM`, `INDUSTRY` write; `ADMIN`, `POLICYMAKER` review/read |
+| Policy aggregates | `ADMIN`, `POLICYMAKER` |
+| Organisation profile | All organisation-backed roles; verification by `ADMIN` |
+| Documents and notifications | All authenticated roles, scoped to owned records |
 | Admin portal, user management, data sources, apartments | `ADMIN` only |
+
+Entity-scoped writes require a **verified** organisation profile. Accounts with a
+`PENDING` organisation can sign in and read national modules but cannot create,
+accept, quote or award until an admin verifies them.
 
 Public registration can self-select any stakeholder role **except** `ADMIN`.
 Administrator accounts are provisioned by the seed script or an existing admin.
-Role authorization is enforced by the backend, not only by the UI.
+Role authorization, record ownership and state transitions are enforced by the
+backend, not only by the UI.
 
 ---
 
@@ -193,12 +217,16 @@ cd backend
 
 The seed script is idempotent and creates:
 
-- Demo administrator, residents and five stakeholder accounts.
+- Demo administrator and residents.
+- Eight stakeholder accounts covering every ecosystem role (citizen, installer,
+  supplier, recycler, financier, DISCOM, industry, policymaker) with organisation
+  profiles.
 - The 60-flat community register, ownership ledger, tariff, billing, RoofMax and SolarVault defaults.
 - Sample national energy, state impact, air quality, jobs, finance, recyclers and weather datasets.
 - Sample RPO targets and circular-economy records.
 
-Current Alembic head: **`356ccfc9d562`**.
+Current Alembic head: **`c1a2b3d4e5f6`** (ecosystem workflows migration,
+down-revision `b7d4e1f2a3c5`).
 
 Useful commands:
 
@@ -239,13 +267,17 @@ Seeded credentials (development defaults; override in `backend/.env`):
 | Resident | `resident101@solarequity.com` | `ResidentDemo#2026` |
 | Resident | `resident102@solarequity.com` | `ResidentDemo#2026` |
 | Citizen | `citizen@solarequity.com` | `ResidentDemo#2026` |
+| Solar installer | `installer@solarequity.com` | `ResidentDemo#2026` |
+| Renewable supplier | `supplier@solarequity.com` | `ResidentDemo#2026` |
+| Recycler | `recycler@solarequity.com` | `ResidentDemo#2026` |
+| Financial institution | `financier@solarequity.com` | `ResidentDemo#2026` |
 | DISCOM | `discom@solarequity.com` | `ResidentDemo#2026` |
 | Industry | `industry@solarequity.com` | `ResidentDemo#2026` |
-| Financial institution | `finance@solarequity.com` | `ResidentDemo#2026` |
-| Policymaker | `policy@solarequity.com` | `ResidentDemo#2026` |
+| Policymaker | `policymaker@solarequity.com` | `ResidentDemo#2026` |
 
-The login page lists these accounts for quick email selection. Passwords are
-never stored in the frontend.
+Stakeholder passwords come from `DEMO_RESIDENT_PASSWORD` when set. Login rejects
+`.test` TLD addresses. The login page lists these accounts for quick email
+selection. Passwords are never stored in the frontend.
 
 ---
 
@@ -292,7 +324,9 @@ consumption and backup hours, evening grid-import reduction, documented
 assumptions and recent recommendation history.
 
 ### D9 — Stakeholder and admin portals
-All roles share the national modules with role-specific focus cards. The
+All ten roles share the national modules with role-specific focus cards and
+navigation. Dedicated dashboards exist for installers (`/installer/dashboard`),
+suppliers (`/supplier/dashboard`) and recyclers (`/recycler/dashboard`). The
 administrator portal (`/admin`) provides:
 
 - Platform statistics and adoption charts.
@@ -301,6 +335,47 @@ administrator portal (`/admin`) provides:
 - Job, finance, recycler, RPO and community content counters.
 - Audit activity and 30-day module usage.
 - Data-quality and unconfigured-integration alerts.
+- Ecosystem oversight at `/admin/ecosystem`: organisation verification, solar,
+  procurement, loan and recycling pipelines, and policy aggregates.
+
+### Ecosystem workflows
+
+Routes: `/solar-requests`, `/solar-installations`, `/procurement`,
+`/procurement/quotations`, `/loans`, `/loan-applications`,
+`/recycling-requests`, `/compliance`, `/organisation`, `/notifications`.
+
+Verified, audited workflows replace ad-hoc coordination between stakeholders.
+Each record is persisted in PostgreSQL, scoped to its owner and organisation, and
+moves through backend-enforced state transitions.
+
+**Citizen ↔ Solar installer** (`/solar-requests`, `/solar-installations`)
+Create a rooftop request, receive installer quotations, accept one quotation,
+track inspection and installation progress. Installers get a pipeline dashboard.
+
+**DISCOM/industry ↔ Supplier** (`/procurement`)
+Publish procurement requests, collect supplier quotations, award or cancel.
+RPO/energy compliance records are filed and reviewed in `/compliance`.
+
+**Citizen ↔ Financier** (`/loans`, `/loan-applications`)
+Financiers publish green loan products; citizens apply, upload documents, track
+approval, request changes, resubmit or withdraw. Financiers get portfolio metrics.
+
+**Citizen ↔ Recycler** (`/recycling-requests`)
+Raise panel/battery/e-waste pickup requests; recyclers accept, schedule, collect,
+process and complete them. Recycling analytics report diverted mass and CO₂.
+
+**Admin ↔ all** (`/admin/ecosystem`, `/organisation`)
+Admins review and verify organisation profiles, monitor every workflow, read
+audit activity and inspect policy aggregates. Organisation owners maintain their
+profile and supporting documents.
+
+Shared capabilities:
+
+- Validated document upload (PDF/PNG/JPG/WEBP/DOC/DOCX/XLSX, max 10 MB).
+- Persisted notifications with unread counts and mark-read controls.
+- Timeline/history on every entity and audit-log entries for privileged writes.
+- Transactional records feed analytics with `PLATFORM_RECORDED` provenance and
+  `is_sample: false`, keeping them separate from labelled sample datasets.
 
 ### Community solar (`/community`)
 Hub for the retained 60-flat implementation:
@@ -332,6 +407,15 @@ All routes are under `/api`. Authentication uses `Authorization: Bearer <JWT>`.
 | D8 | `GET /forecast/locations`, `POST /forecast/estimate`, `GET /forecast/history`, `POST /forecast/refresh-sample` (admin) |
 | Admin | `GET /admin/overview`, `GET /admin/users`, `PATCH /admin/users/{id}`, `GET /admin/data-sources`, `POST /admin/data-sources/{id}/refresh`, `POST /admin/data-sources/refresh-all`, `GET /admin/activity`, `GET /admin/module-usage` |
 | Community | Existing `/apartments`, `/simulation`, `/allocation`, `/billing`, `/roofmax`, `/solarvault` APIs are retained |
+| Solar workflow | `GET /installers`, `GET/POST /solar-requests`, `GET /solar-requests/{id}`, accept/reject/schedule-inspection/quotations/cancel/progress, `POST /solar-quotations/{id}/accept\|reject\|withdraw`, `GET /solar-installations` |
+| Procurement | `GET/POST /procurement/requests`, `GET/PUT /procurement/requests/{id}`, publish/close/cancel/quotations/award, `GET /procurement/quotations`, `POST /procurement/quotations/{id}/withdraw` |
+| Compliance | `GET/POST /compliance/records`, `GET /compliance/summary`, `PUT /compliance/records/{id}`, submit/review |
+| Green loans | `GET/POST /loan-products`, `PUT /loan-products/{id}`, `GET/POST /loan-applications`, `GET /loan-applications/{id}`, decision/resubmit/withdraw, `GET /loan-applications/summary/financier` |
+| Recycling | `GET /recycling-requests/categories`, `GET/POST /recycling-requests`, `GET /recycling-requests/analytics`, `GET /recycling-requests/{id}`, accept/reject/schedule/collect/process/complete/cancel |
+| Organisations | `GET/PUT /organisations/me`, `POST /organisations/me/submit`, `GET /organisations`, `GET /organisations/{id}`, `GET /organisations/{id}/history`, `POST /organisations/{id}/review` |
+| Platform aggregates | `GET /platform/overview`, `GET /platform/policy-aggregates` (ADMIN, POLICYMAKER) |
+| Documents | `POST /documents/upload`, `GET /documents`, `GET /documents/{id}/download`, `POST /documents/{id}/review` |
+| Notifications | `GET /notifications`, `GET /notifications/unread-count`, `POST /notifications/{id}/read`, `POST /notifications/{id}/unread`, `POST /notifications/read-all` |
 
 Full OpenAPI documentation is available at `/docs`.
 
@@ -339,17 +423,18 @@ Full OpenAPI documentation is available at `/docs`.
 
 ## Testing
 
-Backend suite (188 tests):
+Backend suite (214 tests):
 
 ```powershell
 cd backend
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Frontend production build:
+Frontend route-policy check and production build:
 
 ```powershell
 cd frontend
+npm run check:routes
 npm run build
 ```
 
@@ -359,10 +444,15 @@ circular transactions and cancellation rules, impact aggregation, forecast
 estimate types and storage outputs, admin portal aggregation, community
 simulation, allocation, billing and PDFs, RoofMax and SolarVault.
 
+The ecosystem suite (`tests/test_ecosystem_workflows.py`) additionally covers
+workflows A–E end to end, cross-user access denial (IDOR), invalid state
+transitions, unverified-organisation restrictions, upload type/size validation,
+notification read state and analytics provenance.
+
 A manual API smoke pass was also run against the live PostgreSQL database for
-all eight demo accounts, including role-guard checks (403 for unauthorized RPO
-and admin access), calculator, forecast, jobs, finance, circular workflows,
-profile updates and password changes.
+all demo accounts, including role-guard checks (403 for unauthorized RPO and
+admin access), calculator, forecast, jobs, finance, circular workflows,
+profile updates, password changes and each stakeholder dashboard.
 
 ---
 
@@ -372,19 +462,31 @@ The platform extends the original schema rather than replacing it.
 
 New/detailed areas:
 
-- `users`: stakeholder roles, organisation and state fields.
+- `users`: stakeholder roles, organisation and state fields. The role check
+  constraint now allows all ten roles.
 - `green_grid` models: data sources, energy sources/statistics, state impact,
   air quality, RPO targets/compliance, solar calculations, green jobs and
   applications, finance schemes, recyclers, recycling transactions,
   environmental impact, generation forecasts, storage recommendations.
+- `ecosystem` models: organisation profiles/verifications, application
+  documents, solar installation requests/quotations/installations, energy
+  compliance records, procurement requests/supplier quotations, green loan
+  products/applications, recycling requests/events and notifications.
 - Audit log entries for privileged writes across modules.
 - Existing community tables (`apartments`, simulation runs, allocations,
   bills, billing audits, tariffs, RoofMax and SolarVault configurations) remain.
 
-Migration:
+Migration (revision `c1a2b3d4e5f6`, down-revision `b7d4e1f2a3c5`). No existing
+table or row is dropped:
 
 ```powershell
 .\.venv\Scripts\python.exe -m alembic upgrade head
+```
+
+Roll the ecosystem migration back only:
+
+```powershell
+.\.venv\Scripts\python.exe -m alembic downgrade b7d4e1f2a3c5
 ```
 
 ---
@@ -411,6 +513,10 @@ Frontend variables (see `frontend/.env.example`):
 | `VITE_API_BASE_URL` | Optional direct API URL; defaults to proxied `/api` |
 | `VITE_DEMO_ADMIN_EMAIL`, `VITE_DEMO_RESIDENT_EMAIL` | Login-page email hints |
 
+Document uploads accept PDF, PNG, JPG, WEBP, DOC, DOCX and XLSX files up to
+10 MB. Files are stored under `backend/uploads/` and new documents start in
+`UPLOADED` until reviewed.
+
 Never commit real `.env` files or secrets.
 
 ---
@@ -434,7 +540,8 @@ These are intentional, not hidden:
    before any handover.
 7. **Community solar data is a seeded sample society**, though every calculation
    is performed by the backend from stored records.
-8. **Notifications are in-session only**; there is no email/SMS delivery.
+8. **Notifications are persisted in the database** with read/unread state, but
+   there is no email/SMS delivery.
 9. **No payment gateway or lender integration** is implemented.
 10. **MeterGuard** anomaly detection remains a placeholder module.
 
@@ -451,6 +558,8 @@ These are intentional, not hidden:
 | CORS error | Add the frontend origin to `CORS_ORIGINS` and restart the API. |
 | Frontend build succeeds but charts are empty | Check the browser network tab; empty modules should show explicit empty states, and errors show retry states. |
 | RPO page redirects to dashboard | The signed-in role is not in `ADMIN`, `DISCOM`, `INDUSTRY` or `POLICYMAKER`. |
+| Ecosystem write returns 403 | The organisation profile is `PENDING`; an admin must verify it at `/admin/ecosystem`. |
+| Document upload is rejected | Check the file type (PDF/PNG/JPG/WEBP/DOC/DOCX/XLSX) and the 10 MB limit. |
 
 ---
 
@@ -472,6 +581,7 @@ Copy-Item .env.example .env
 cd ..\frontend
 npm install
 npm run dev
+npm run check:routes
 npm run build
 npm run preview
 ```
