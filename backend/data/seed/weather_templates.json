@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "title": "Weather and renewable resource forecast templates - sample",
+    "disclaimer": "SAMPLE FORECAST TEMPLATES. Values are illustrative monthly climatology-style samples, not live numerical weather predictions. Forecasts generated from this file are labelled estimated in the UI."
+  },
+  "locations": [
+    { "location": "New Delhi", "state": "Delhi", "base_irradiance": 5.1, "base_wind": 3.4, "base_temp": 30.0, "cloud": 28 },
+    { "location": "Jaipur", "state": "Rajasthan", "base_irradiance": 5.9, "base_wind": 4.1, "base_temp": 32.0, "cloud": 18 },
+    { "location": "Ahmedabad", "state": "Gujarat", "base_irradiance": 5.7, "base_wind": 4.6, "base_temp": 33.0, "cloud": 21 },
+    { "location": "Mumbai", "state": "Maharashtra", "base_irradiance": 5.0, "base_wind": 5.0, "base_temp": 30.5, "cloud": 38 },
+    { "location": "Pune", "state": "Maharashtra", "base_irradiance": 5.2, "base_wind": 3.8, "base_temp": 29.0, "cloud": 32 },
+    { "location": "Bengaluru", "state": "Karnataka", "base_irradiance": 4.8, "base_wind": 3.2, "base_temp": 27.0, "cloud": 36 },
+    { "location": "Chennai", "state": "Tamil Nadu", "base_irradiance": 5.1, "base_wind": 4.9, "base_temp": 31.0, "cloud": 35 },
+    { "location": "Hyderabad", "state": "Telangana", "base_irradiance": 5.3, "base_wind": 3.6, "base_temp": 30.5, "cloud": 24 },
+    { "location": "Kolkata", "state": "West Bengal", "base_irradiance": 4.6, "base_wind": 3.0, "base_temp": 30.0, "cloud": 44 },
+    { "location": "Lucknow", "state": "Uttar Pradesh", "base_irradiance": 5.0, "base_wind": 3.1, "base_temp": 30.0, "cloud": 30 }
+  ]
+}

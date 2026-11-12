@@ -1,0 +1,16 @@
+{
+  "_meta": {
+    "title": "E-waste and solar panel recycler directory - sample records",
+    "disclaimer": "SAMPLE DIRECTORY. Recycler names, contacts and certifications are illustrative and must be verified before use. No live CPCB authorisation feed is connected."
+  },
+  "recyclers": [
+    { "name": "ReNewCycle Solar Recycling", "city": "Chennai", "state": "Tamil Nadu", "address": "Industrial Estate, Sriperumbudur", "accepted_categories": ["SOLAR_PANEL", "EWASTE"], "capacity_tonnes_per_month": 450, "certification": "CPCB E-waste authorised (sample)", "contact_email": "contact@renewcycle.example", "contact_phone": "+91-44-0000-0001", "is_verified": false },
+    { "name": "GreenLoop E-Waste Solutions", "city": "Bengaluru", "state": "Karnataka", "address": "Peenya Industrial Area", "accepted_categories": ["EWASTE", "EV_BATTERY", "IT_EQUIPMENT"], "capacity_tonnes_per_month": 320, "certification": "ISO 14001 (sample)", "contact_email": "hello@greenloop.example", "contact_phone": "+91-80-0000-0002", "is_verified": false },
+    { "name": "Surya Circular Materials", "city": "Jaipur", "state": "Rajasthan", "address": "Vishwakarma Industrial Zone", "accepted_categories": ["SOLAR_PANEL", "GLASS", "ALUMINIUM"], "capacity_tonnes_per_month": 210, "certification": "State pollution board consent (sample)", "contact_email": "ops@suryacircular.example", "contact_phone": "+91-141-000-0003", "is_verified": false },
+    { "name": "VoltReturn Battery Recovery", "city": "Pune", "state": "Maharashtra", "address": "Chakan MIDC", "accepted_categories": ["EV_BATTERY", "LITHIUM_ION", "LEAD_ACID"], "capacity_tonnes_per_month": 280, "certification": "Battery waste handling authorisation (sample)", "contact_email": "recovery@voltreturn.example", "contact_phone": "+91-20-0000-0004", "is_verified": false },
+    { "name": "Ahmedabad CleanTech Recyclers", "city": "Ahmedabad", "state": "Gujarat", "address": "Naroda Industrial Estate", "accepted_categories": ["EWASTE", "SOLAR_PANEL", "CABLES"], "capacity_tonnes_per_month": 190, "certification": "CPCB registration (sample)", "contact_email": "info@actrecyclers.example", "contact_phone": "+91-79-0000-0005", "is_verified": false },
+    { "name": "Eastern Green Recovery", "city": "Kolkata", "state": "West Bengal", "address": "Howrah Industrial Belt", "accepted_categories": ["EWASTE", "SOLAR_PANEL"], "capacity_tonnes_per_month": 160, "certification": "WBPCB consent (sample)", "contact_email": "connect@easterngreen.example", "contact_phone": "+91-33-0000-0006", "is_verified": false },
+    { "name": "Delhi E-Cycle Network", "city": "New Delhi", "state": "Delhi", "address": "Okhla Industrial Phase II", "accepted_categories": ["EWASTE", "IT_EQUIPMENT", "EV_BATTERY"], "capacity_tonnes_per_month": 240, "certification": "CPCB authorised collection centre (sample)", "contact_email": "care@delhiecycle.example", "contact_phone": "+91-11-0000-0007", "is_verified": false },
+    { "name": "Deccan Solar Reclaim", "city": "Hyderabad", "state": "Telangana", "address": "Jeedimetla Industrial Area", "accepted_categories": ["SOLAR_PANEL", "ALUMINIUM", "GLASS"], "capacity_tonnes_per_month": 140, "certification": "TSPCB consent (sample)", "contact_email": "team@deccanreclaim.example", "contact_phone": "+91-40-0000-0008", "is_verified": false }
+  ]
+}

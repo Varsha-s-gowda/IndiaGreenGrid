@@ -1,0 +1,34 @@
+{
+  "_meta": {
+    "title": "State-level renewable capacity, avoided emissions and air quality - curated sample",
+    "disclaimer": "SAMPLE DATASET. State capacity values are rounded demonstration figures based on public MNRE/CEA summaries. Air-quality values are illustrative sample readings, not live CPCB data.",
+    "source": "MNRE / CEA / CPCB public summaries (sample extraction)",
+    "year": 2025
+  },
+  "rows": [
+    { "state": "Rajasthan", "solar_capacity_mw": 24400, "wind_capacity_mw": 5600, "total_renewable_mw": 33900, "co2_avoided_tonnes": 48400000, "air_quality_index": 168, "pm25": 82 },
+    { "state": "Gujarat", "solar_capacity_mw": 14600, "wind_capacity_mw": 12400, "total_renewable_mw": 33200, "co2_avoided_tonnes": 45300000, "air_quality_index": 142, "pm25": 63 },
+    { "state": "Karnataka", "solar_capacity_mw": 9600, "wind_capacity_mw": 6400, "total_renewable_mw": 20400, "co2_avoided_tonnes": 30200000, "air_quality_index": 118, "pm25": 49 },
+    { "state": "Tamil Nadu", "solar_capacity_mw": 8200, "wind_capacity_mw": 10600, "total_renewable_mw": 22800, "co2_avoided_tonnes": 33800000, "air_quality_index": 104, "pm25": 41 },
+    { "state": "Maharashtra", "solar_capacity_mw": 7800, "wind_capacity_mw": 5200, "total_renewable_mw": 17600, "co2_avoided_tonnes": 25100000, "air_quality_index": 156, "pm25": 71 },
+    { "state": "Andhra Pradesh", "solar_capacity_mw": 5200, "wind_capacity_mw": 4100, "total_renewable_mw": 11800, "co2_avoided_tonnes": 17200000, "air_quality_index": 132, "pm25": 58 },
+    { "state": "Madhya Pradesh", "solar_capacity_mw": 4300, "wind_capacity_mw": 2900, "total_renewable_mw": 8800, "co2_avoided_tonnes": 12800000, "air_quality_index": 149, "pm25": 66 },
+    { "state": "Telangana", "solar_capacity_mw": 4100, "wind_capacity_mw": 1300, "total_renewable_mw": 6900, "co2_avoided_tonnes": 9800000, "air_quality_index": 126, "pm25": 54 },
+    { "state": "Uttar Pradesh", "solar_capacity_mw": 3100, "wind_capacity_mw": 300, "total_renewable_mw": 4800, "co2_avoided_tonnes": 6900000, "air_quality_index": 214, "pm25": 112 },
+    { "state": "Punjab", "solar_capacity_mw": 1800, "wind_capacity_mw": 100, "total_renewable_mw": 3100, "co2_avoided_tonnes": 4300000, "air_quality_index": 186, "pm25": 94 },
+    { "state": "Kerala", "solar_capacity_mw": 1200, "wind_capacity_mw": 300, "total_renewable_mw": 2600, "co2_avoided_tonnes": 3600000, "air_quality_index": 96, "pm25": 37 },
+    { "state": "Odisha", "solar_capacity_mw": 1500, "wind_capacity_mw": 200, "total_renewable_mw": 2900, "co2_avoided_tonnes": 3900000, "air_quality_index": 138, "pm25": 61 }
+  ],
+  "air_quality": [
+    { "city": "New Delhi", "state": "Delhi", "aqi": 231, "pm25": 128, "pm10": 236, "category": "Poor" },
+    { "city": "Mumbai", "state": "Maharashtra", "aqi": 156, "pm25": 71, "pm10": 142, "category": "Moderate" },
+    { "city": "Bengaluru", "state": "Karnataka", "aqi": 118, "pm25": 49, "pm10": 96, "category": "Moderate" },
+    { "city": "Chennai", "state": "Tamil Nadu", "aqi": 104, "pm25": 41, "pm10": 82, "category": "Moderate" },
+    { "city": "Hyderabad", "state": "Telangana", "aqi": 126, "pm25": 54, "pm10": 103, "category": "Moderate" },
+    { "city": "Ahmedabad", "state": "Gujarat", "aqi": 142, "pm25": 63, "pm10": 118, "category": "Moderate" },
+    { "city": "Jaipur", "state": "Rajasthan", "aqi": 168, "pm25": 82, "pm10": 154, "category": "Poor" },
+    { "city": "Kolkata", "state": "West Bengal", "aqi": 174, "pm25": 86, "pm10": 161, "category": "Poor" },
+    { "city": "Lucknow", "state": "Uttar Pradesh", "aqi": 214, "pm25": 112, "pm10": 198, "category": "Poor" },
+    { "city": "Thiruvananthapuram", "state": "Kerala", "aqi": 96, "pm25": 37, "pm10": 69, "category": "Satisfactory" }
+  ]
+}
