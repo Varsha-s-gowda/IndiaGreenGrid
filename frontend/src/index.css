@@ -1,0 +1,592 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full scroll-smooth;
+  }
+
+  body {
+    @apply h-full bg-slate-50 text-slate-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  #root {
+    @apply min-h-full;
+  }
+
+  ::selection {
+    @apply bg-forest-200 text-forest-900;
+  }
+}
+
+@layer components {
+  .field {
+    @apply h-11 w-full rounded-lg border border-slate-200 bg-white px-3.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-forest-500 focus:ring-2 focus:ring-forest-500/15 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500;
+  }
+
+  .field-with-icon {
+    @apply pl-10;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+
+  .field-hint {
+    @apply mt-1.5 text-xs leading-5 text-slate-500;
+  }
+
+  .field-error {
+    @apply mt-1.5 text-xs leading-5 text-rose-600;
+  }
+
+  .page-container {
+    @apply mx-auto w-full max-w-[1440px];
+  }
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+@keyframes aurora-drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-4%, 6%, 0) scale(1.08);
+  }
+}
+
+@keyframes aurora-drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(5%, -5%, 0) scale(0.96);
+  }
+}
+
+@keyframes aurora-drift-c {
+  0% {
+    transform: translate3d(-3%, 2%, 0) scale(0.95);
+  }
+  100% {
+    transform: translate3d(4%, -4%, 0) scale(1.06);
+  }
+}
+
+@keyframes particle-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--particle-opacity, 0.3);
+  }
+  75% {
+    opacity: calc(var(--particle-opacity, 0.3) * 0.6);
+  }
+  100% {
+    transform: translate3d(var(--particle-drift, 24px), -112vh, 0) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes border-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+
+.solar-backdrop {
+  background: linear-gradient(180deg, #f7fbf8 0%, #eef6f1 45%, #f8fafc 100%);
+}
+
+.solar-aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.solar-aurora--one {
+  top: -18rem;
+  right: -14rem;
+  height: 42rem;
+  width: 42rem;
+  background: radial-gradient(circle at center, rgba(98, 174, 128, 0.34), transparent 68%);
+  animation: aurora-drift-a 24s ease-in-out infinite alternate;
+}
+
+.solar-aurora--two {
+  bottom: -20rem;
+  left: -12rem;
+  height: 38rem;
+  width: 38rem;
+  background: radial-gradient(circle at center, rgba(61, 143, 96, 0.22), transparent 70%);
+  animation: aurora-drift-b 30s ease-in-out infinite alternate;
+}
+
+.solar-aurora--three {
+  top: 35%;
+  left: 45%;
+  height: 30rem;
+  width: 30rem;
+  background: radial-gradient(circle at center, rgba(150, 204, 169, 0.2), transparent 70%);
+  animation: aurora-drift-c 36s ease-in-out infinite alternate;
+}
+
+.solar-particle {
+  position: absolute;
+  bottom: -8vh;
+  display: block;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(61, 143, 96, 0.85) 0%,
+    rgba(61, 143, 96, 0.18) 55%,
+    rgba(61, 143, 96, 0) 72%
+  );
+  box-shadow: 0 0 10px 2px rgba(61, 143, 96, 0.18);
+  opacity: 0;
+  animation-name: particle-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+
+@media (pointer: fine) and (hover: hover) {
+  .has-custom-cursor,
+  .has-custom-cursor a,
+  .has-custom-cursor button,
+  .has-custom-cursor [role="button"],
+  .has-custom-cursor [data-cursor="hover"],
+  .has-custom-cursor label,
+  .has-custom-cursor summary,
+  .has-custom-cursor .cursor-pointer {
+    cursor: none;
+  }
+
+  .has-custom-cursor input,
+  .has-custom-cursor textarea,
+  .has-custom-cursor select,
+  .has-custom-cursor [contenteditable="true"] {
+    cursor: auto;
+  }
+
+  .has-custom-cursor input[type="text"],
+  .has-custom-cursor input[type="email"],
+  .has-custom-cursor input[type="password"],
+  .has-custom-cursor input[type="search"],
+  .has-custom-cursor input[type="number"],
+  .has-custom-cursor input[type="date"],
+  .has-custom-cursor input[type="datetime-local"],
+  .has-custom-cursor input[type="month"],
+  .has-custom-cursor input[type="time"],
+  .has-custom-cursor input[type="url"],
+  .has-custom-cursor input[type="tel"],
+  .has-custom-cursor input:not([type]),
+  .has-custom-cursor textarea {
+    cursor: text;
+  }
+
+  .has-custom-cursor input[type="checkbox"],
+  .has-custom-cursor input[type="radio"],
+  .has-custom-cursor input[type="range"],
+  .has-custom-cursor input[type="color"],
+  .has-custom-cursor input[type="file"] {
+    cursor: pointer;
+  }
+
+  .has-custom-cursor button:disabled,
+  .has-custom-cursor .cursor-not-allowed,
+  .has-custom-cursor [aria-disabled="true"] {
+    cursor: none;
+  }
+}
+
+.cursor-glow {
+  background: radial-gradient(
+    circle at center,
+    rgba(61, 143, 96, 0.16) 0%,
+    rgba(61, 143, 96, 0.1) 45%,
+    rgba(61, 143, 96, 0) 70%
+  );
+  border: 1px solid rgba(61, 143, 96, 0.38);
+  box-shadow: 0 0 24px 6px rgba(61, 143, 96, 0.16);
+}
+
+.cursor-dot {
+  background: #255d3e;
+  box-shadow: 0 0 10px 2px rgba(45, 116, 76, 0.45);
+}
+
+
+.premium-card {
+  position: relative;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.premium-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    rgba(61, 143, 96, 0) 0%,
+    rgba(61, 143, 96, 0.45) 28%,
+    rgba(98, 174, 128, 0.16) 52%,
+    rgba(61, 143, 96, 0) 78%
+  );
+  background-size: 200% 200%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.premium-card:hover,
+.premium-card:focus-within {
+  border-color: #c2e2ce;
+  box-shadow:
+    0 18px 44px -30px rgba(26, 61, 43, 0.35),
+    0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+.premium-card:hover::after {
+  opacity: 1;
+  animation: border-pan 3.2s linear infinite;
+}
+
+.icon-chip {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.premium-card:hover .icon-chip,
+.group:hover .icon-chip,
+.icon-chip:hover {
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 8px 18px -10px rgba(45, 116, 76, 0.55);
+}
+
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.22) 48%,
+    transparent 66%
+  );
+  transform: translateX(-120%) rotate(2deg);
+  transition: transform 0.75s ease;
+  pointer-events: none;
+}
+
+.btn-shine:hover::after {
+  transform: translateX(120%) rotate(2deg);
+}
+
+.btn-shine:hover {
+  box-shadow: 0 14px 30px -16px rgba(29, 78, 52, 0.55);
+}
+
+.btn-lift {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-lift:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -18px rgba(16, 24, 40, 0.35);
+}
+
+
+.sidebar-link {
+  background-image: linear-gradient(
+    90deg,
+    rgba(45, 116, 76, 0.1) 0%,
+    rgba(61, 143, 96, 0.04) 60%,
+    rgba(61, 143, 96, 0) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition:
+    background-size 0.3s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.is-active {
+  background-size: 100% 100%;
+}
+
+.sidebar-link svg {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.sidebar-link:hover svg {
+  transform: translateY(-1px) scale(1.06);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .solar-aurora {
+    animation: none !important;
+  }
+
+  .solar-particle {
+    display: none;
+  }
+
+  .premium-card:hover::after {
+    animation: none;
+  }
+
+  .btn-shine::after {
+    display: none;
+  }
+
+  .sidebar-link,
+  .sidebar-link svg,
+  .icon-chip {
+    transition: none;
+  }
+}
+
+
+.login-hero {
+  background:
+    radial-gradient(120% 85% at 82% 12%, rgba(16, 185, 129, 0.16), transparent 58%),
+    radial-gradient(90% 70% at 8% 92%, rgba(5, 150, 105, 0.22), transparent 62%),
+    linear-gradient(155deg, #0b2e1f 0%, #0a291b 42%, #061c12 100%);
+}
+
+.login-hero-aurora {
+  position: absolute;
+  top: -22%;
+  right: -14%;
+  height: 34rem;
+  width: 34rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.18), transparent 66%);
+  filter: blur(18px);
+  pointer-events: none;
+  animation: aurora-drift-a 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.login-hero-beam {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 36%,
+      rgba(167, 243, 208, 0.055) 48%,
+      transparent 60%
+    ),
+    radial-gradient(55% 45% at 32% 62%, rgba(52, 211, 153, 0.08), transparent 72%);
+}
+
+.login-float-icon {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 20px 44px -24px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 0 32px -10px rgba(52, 211, 153, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: login-float 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes login-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-hero-aurora,
+  .login-float-icon {
+    animation: none;
+  }
+}
+
+
+.login-shell {
+  overflow-x: hidden;
+  background: #f6f9f5;
+}
+
+.login-panel {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(72% 58% at 88% 6%, rgba(61, 143, 96, 0.08), transparent 62%),
+    radial-gradient(62% 52% at 6% 96%, rgba(61, 143, 96, 0.07), transparent 64%),
+    linear-gradient(180deg, #f9fbf8 0%, #f4f8f3 55%, #eef5ee 100%);
+}
+
+.login-panel-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.login-panel-circle {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px solid rgba(61, 143, 96, 0.14);
+}
+
+.login-panel-circle--one {
+  top: -9rem;
+  right: -7rem;
+  height: 26rem;
+  width: 26rem;
+  background: radial-gradient(circle, rgba(61, 143, 96, 0.06), transparent 68%);
+  box-shadow: inset 0 0 0 3.5rem rgba(61, 143, 96, 0.025);
+}
+
+.login-panel-circle--two {
+  bottom: -11rem;
+  left: -9rem;
+  height: 30rem;
+  width: 30rem;
+  border-color: rgba(61, 143, 96, 0.1);
+  background: radial-gradient(circle, rgba(61, 143, 96, 0.05), transparent 70%);
+}
+
+.login-panel-circle--three {
+  bottom: 18%;
+  right: -5.5rem;
+  height: 13rem;
+  width: 13rem;
+  border-style: dashed;
+  border-color: rgba(61, 143, 96, 0.16);
+}
+
+.login-panel-leaf {
+  position: absolute;
+  bottom: -2rem;
+  left: -2.5rem;
+  height: 15rem;
+  width: 15rem;
+  color: rgba(61, 143, 96, 0.075);
+  transform: rotate(8deg);
+}
+
+.login-panel-content {
+  animation: login-fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-hero {
+  animation: login-fade-in 0.7s ease-out both;
+}
+
+.login-demo {
+  animation: login-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@keyframes login-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes login-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-panel-content,
+  .login-hero,
+  .login-demo {
+    animation: none;
+  }
+
+  .login-demo button:hover {
+    transform: none;
+  }
+}
