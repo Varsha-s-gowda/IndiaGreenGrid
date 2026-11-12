@@ -1,0 +1,151 @@
+"""SQLAlchemy ORM models.
+
+Importing this package registers every model on ``Base.metadata``.
+"""
+
+from app.models.allocation import (
+    AllocationMethod,
+    AllocationRecord,
+    AllocationRun,
+    AllocationRunStatus,
+    AllocationSummary,
+)
+from app.models.apartment import CONSUMPTION_PROFILES, Apartment
+from app.models.battery import (
+    BatteryConfiguration,
+    BatteryHourlyRecord,
+    BatterySimulation,
+    SimulationState,
+)
+from app.models.billing import (
+    AuditCheckType,
+    AuditStatus,
+    Bill,
+    BillLineItem,
+    BillLineType,
+    BillStatus,
+    BillingAudit,
+    BillingConfiguration,
+)
+from app.models.common_consumption import CommonAreaCategory, CommonConsumption
+from app.models.ecosystem import (
+    ApplicationDocument,
+    EnergyComplianceRecord,
+    GreenLoanApplication,
+    GreenLoanProduct,
+    Notification,
+    OrganisationProfile,
+    OrganisationVerification,
+    RecyclingRequest,
+    RecyclingRequestEvent,
+    RenewableProcurementRequest,
+    SolarInstallation,
+    SolarInstallationRequest,
+    SolarQuotation,
+    SupplierQuotation,
+)
+from app.models.electricity_tariff import ElectricityTariff
+from app.models.green_grid import (
+    AirQualityReading,
+    AuditLog,
+    DataSource,
+    EnergySource,
+    EnvironmentalImpact,
+    FinanceScheme,
+    GenerationForecast,
+    GreenJob,
+    JobApplication,
+    NationalEnergyStatistic,
+    Recycler,
+    RecyclingTransaction,
+    RpoComplianceRecord,
+    RpoTarget,
+    SolarCalculation,
+    StateEnergyStatistic,
+    StorageRecommendation,
+    WeatherForecast,
+)
+from app.models.meter_reading import MeterReading
+from app.models.ownership_share import OwnershipShare
+from app.models.roofmax import (
+    AnalysisStatus,
+    CapacityScenario,
+    RoofConfiguration,
+    ScenarioType,
+    SolarCapacityAnalysis,
+)
+from app.models.simulation_run import SimulationRun, SimulationStatus
+from app.models.solar_configuration import SolarConfiguration
+from app.models.solar_generation import SolarGeneration
+from app.models.user import STAKEHOLDER_ROLES, User, UserRole
+
+__all__ = [
+    "AirQualityReading",
+    "AllocationMethod",
+    "AllocationRecord",
+    "AllocationRun",
+    "AllocationRunStatus",
+    "AllocationSummary",
+    "AnalysisStatus",
+    "Apartment",
+    "ApplicationDocument",
+    "AuditCheckType",
+    "AuditLog",
+    "AuditStatus",
+    "BatteryConfiguration",
+    "BatteryHourlyRecord",
+    "BatterySimulation",
+    "Bill",
+    "BillLineItem",
+    "BillLineType",
+    "BillStatus",
+    "BillingAudit",
+    "BillingConfiguration",
+    "CONSUMPTION_PROFILES",
+    "CapacityScenario",
+    "CommonAreaCategory",
+    "CommonConsumption",
+    "DataSource",
+    "ElectricityTariff",
+    "EnergySource",
+    "EnergyComplianceRecord",
+    "EnvironmentalImpact",
+    "FinanceScheme",
+    "GenerationForecast",
+    "GreenJob",
+    "GreenLoanApplication",
+    "GreenLoanProduct",
+    "JobApplication",
+    "MeterReading",
+    "NationalEnergyStatistic",
+    "Notification",
+    "OrganisationProfile",
+    "OrganisationVerification",
+    "OwnershipShare",
+    "Recycler",
+    "RecyclingRequest",
+    "RecyclingRequestEvent",
+    "RecyclingTransaction",
+    "RenewableProcurementRequest",
+    "RpoComplianceRecord",
+    "RpoTarget",
+    "RoofConfiguration",
+    "ScenarioType",
+    "SimulationState",
+    "SimulationRun",
+    "SimulationStatus",
+    "SolarCapacityAnalysis",
+    "STAKEHOLDER_ROLES",
+    "SolarCalculation",
+    "SolarConfiguration",
+    "SolarGeneration",
+    "SolarInstallation",
+    "SolarInstallationRequest",
+    "SolarQuotation",
+    "StateEnergyStatistic",
+    "StorageRecommendation",
+    "SupplierQuotation",
+    "User",
+    "UserRole",
+    "WeatherForecast",
+]
